@@ -1,0 +1,495 @@
+drop table englishProverb;
+drop table homonym; 
+drop table reorder;
+drop table substitution;
+drop table typeOfChange;
+
+Drop Table synonyms;
+drop table pos; 
+drop table spanishProverb; 
+drop table antonym;
+drop table deletion;
+drop table insertion;
+drop table englishLiteral;
+ 
+ 
+ 
+ 
+create table englishProverb(
+  meaningEng varchar(256),
+  mID int,
+  primary key(mID)
+)
+
+
+create table spanishProverb
+(
+  meaningSpa varchar(256), 
+  mID int, 
+  foreign key (mID) references englishProverb(mID) 
+)
+
+create table spanishLiteral
+(
+  literalSpa varchar(256),
+  mID int,
+  foreign key (mID) references englishProverb(mID)
+)
+
+create table typeOfChange
+(
+  changed varchar(256),
+  changeID int,
+  
+  primary key (changeID)
+  
+) 
+
+create table POS
+(
+
+  pos varchar(256),
+  posID int,
+  
+  primary key (posID)
+)
+
+create table substitution
+(
+  originalWord varchar(256),
+ 
+  posID int,
+  mID int, 
+  originalID int,
+  
+  primary key(originalID),
+  foreign key (mID) references englishProverb(mID),
+  foreign key (posID) references pos(posID)
+ 
+)
+
+
+
+create table insertion
+(
+  newWord varchar(256),
+  posID int,
+  mID int,
+  
+  foreign key (mID) references englishProverb(mID),
+  foreign key (posID) references pos(posID)
+  
+)
+
+
+
+
+
+create table deletion
+(
+  missingWord varchar(256),
+  posID int,
+  mID int,
+  
+  foreign key (mID) references englishProverb(mID),
+  foreign key (posID) references pos(posID)
+  
+)
+
+create table reorder
+(
+  newSequence varchar(256),
+  mID int,
+  
+  foreign key (mID) references englishProverb(mID)
+  
+) 
+
+
+
+
+create table synonyms
+(
+  subWord varchar(256),
+  originalID int,
+  posID int,
+  changeID int,
+  mID int, 
+
+
+ foreign key (originalID) references substitution(originalID),
+ foreign key(changeID) references typeOfChange(changeID),
+ foreign key (mID) references englishProverb(mID),
+ foreign key (posID) references pos(posID)
+
+) 
+
+
+create table antonym
+(
+  subWord varchar(256),
+  originalID int,
+  posID int,
+  changeID int,
+  mID int, 
+
+
+ foreign key (originalID) references substitution(originalID),
+ foreign key(changeID) references typeOfChange(changeID),
+ foreign key (mID) references englishProverb(mID),
+ foreign key (posID) references pos(posID)
+) 
+
+
+create table homonym
+(
+  subWord varchar(256),
+  originalID int,
+  posID int,
+  changeID int,
+  mID int, 
+
+
+ foreign key (originalID) references substitution(originalID),
+ foreign key(changeID) references typeOfChange(changeID),
+ foreign key (mID) references englishProverb(mID),
+ foreign key (posID) references pos(posID)
+) 
+
+
+
+
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Dont bite the hand that feeds you', 1);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('No muerdas la mano que te da de comer.', 1);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Every cloud has a silver lining', 2);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Cada nube tiene un forro de plata', 2);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('No hay mal que por bien no venga', 2);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('The squeaky wheel gets the grease', 3);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('La rueda chirriante obtiene la grasa ', 3);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('El que no llora no mama', 3);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('It takes two to tango', 4);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Se necesitan dos para bailar un tango', 4);
+INSERT INTO spanishPRoverb (meaningSpa, mID) Values ('Es cosa de dosa', 4);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Beggers cant be choosers', 5);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Los mendigos no pueden ser selectores', 5);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('A mucha hambre, no hay pan duro', 5);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Like water off of a ducks back', 6);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Como el agua de la espalda de un pato', 6);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('Como quien oye llover', 6);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Time heals all wounds', 7);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('El tiempo cura todas las heridas', 7);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('Con el tiempo todo se consigue', 7);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Better late than never', 8);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Mejor tarde que nunca', 8);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('MÃ¡s vale tarde que nunca', 8);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('Like father like son', 9);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('Como padre como hijo', 9);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('El hijo de la gata ratones mata', 9);
+
+INSERT INTO englishProverb (meaningEng, mID) Values ('The grass is greener on the other side', 10);
+INSERT INTO spanishLiteral (literalSpa, mID) Values ('La hierba es mas verde en el otro lado', 10);
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('Las manzanas siempre parecen mejores en el huerto del vecino', 10);
+
+INSERT INTO pos (pos, posID) Values ('adverb', 1);
+INSERT INTO pos (pos, posID) Values ('verb', 2);
+INSERT INTO pos (pos, posID) Values ('noun', 3);
+INSERT INTO pos (pos, posID) Values ('article', 4);
+INSERT INTO pos (pos, posID) Values ('adj', 5);
+INSERT INTO pos (pos, posID) Values ('preposition', 6);
+
+
+INSERT INTO typeOfChange (changed, changeID) Values ('substitution', 1);
+INSERT INTO typeOfChange (changed, changeID) Values ('deletion', 2);
+INSERT INTO typeOfChange (changed, changeID) Values ('insetion', 3);
+
+
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('Dont', 2, 1 ,1 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('Never',1 ,1 ,1 ,1);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('Feeds', 2, 2 ,1);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('starves', 2, 1, 2, 1);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('bite', 2, 3 ,1);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('byte', 3, 2, 3, 1);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('Dont', 2, 1);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('ever', 1, 1);
+
+INSERT INTO reorder (newsequence, mID) Values ('The hand that feeds you, dont bite', 1);
+
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('Every', 5, 4 ,2 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('All',5 ,1 ,4 ,2);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('lining', 3, 5 ,2);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('facing', 3, 1, 5, 2);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('Every', 5, 6 ,2);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('Avery', 3, 1, 6, 2);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('Silver', 5, 2);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('definitely', 1, 2);
+
+INSERT INTO reorder (newsequence, mID) Values ('Every silver lining has a cloud', 2);
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('squeaky', 5, 7 ,3 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('squealy',5 ,1 ,7 ,3);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('squeaky', 5, 8 ,3);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('quiet', 5, 1, 8, 3);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('wheel', 3, 9 ,3);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('will', 3, 1, 9, 3);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('The', 4, 3);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('always', 1, 3);
+
+INSERT INTO reorder (newsequence, mID) Values ('The squeaky grease gets the wheel', 3);
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('tango', 2, 10 ,4 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('dance',2 ,1 ,10 ,4);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('two', 3, 11 ,4);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('none', 3, 1, 11, 4);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('two', 3, 12 ,4);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('too', 1, 1, 12, 4);
+
+INSERT INTO deletion (missingWord, posID, mID) Values (' to tango', 2, 4);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('Remember', 2, 4);
+
+INSERT INTO reorder (newsequence, mID) Values ('It takes to two tango', 4);
+
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('choosers', 3, 13 ,5 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('selectors',3 ,1 ,13 ,5);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('cant', 2, 14 ,5);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('can', 2, 1, 14, 5);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('be', 2, 15 ,5);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('bee', 3, 1, 15, 5);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('choosers', 3, 5);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('ever', 1, 5);
+
+INSERT INTO reorder (newsequence, mID) Values ('Choosers cant beg', 5);
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('water', 3, 16 ,6 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('aqua',3 ,1 ,16 ,6);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('off', 6, 17 ,6);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('on', 6, 1, 17, 6);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('back', 3, 18 ,6);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('bach', 3, 1, 18, 6);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('of', 6, 6);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('Its', 2, 6);
+
+INSERT INTO reorder (newsequence, mID) Values ('Its like a ducks back with water', 6);
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('Time', 3, 19 ,7 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('distance/speed',3 ,1 ,19 ,7);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('heals', 2, 20 ,7);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('wounds', 2, 1, 20, 7);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('heals', 2, 21 ,7);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('heels', 3, 1, 21, 7);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('wounds', 3, 7);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('cant', 2, 7);
+
+INSERT INTO reorder (newsequence, mID) Values ('Wound heals all time', 7);
+
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('late', 5, 22 ,8 );
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('tardy',5 ,1 ,22 ,8);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('late', 5, 23 ,8);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('punctual', 5, 1, 23, 8);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('than', 1, 24 ,8);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('then', 3, 1, 24, 8);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('than never', 1, 8);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('always', 1, 8);
+
+INSERT INTO reorder (newsequence, mID) Values ('Never late is better', 8);
+
+
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('father', 3, 25 ,9);
+INSERT INTO synonyms (subWord, posID, changeID, originalID, mID) Values ('dad',3 ,1 ,25 ,9);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('son', 3, 26 ,9);
+INSERT INTO antonym (subWord, posID, changeID, originalID, mID) Values ('daughter', 3, 1, 26, 9);
+
+INSERT INTO substitution (originalWord, posID, originalID,  mID) Values ('son', 3, 27 ,9);
+INSERT INTO homonym (subWord, posID, changeID, originalID, mID) Values ('sun', 3, 1, 27, 9);
+
+INSERT INTO deletion (missingWord, posID, mID) Values ('Like', 6, 9);
+
+INSERT INTO insertion (newWord, posID, mID) Values ('Like they say', 1, 9);
+
+INSERT INTO reorder (newsequence, mID) Values ('He is like his father', 9);
+
+
+
+
+
+
+
+
+
+
+
+
+-- Query with join
+select meaningEng, meaningSpa
+from englishProverb
+join spanishProverb
+   on englishProverb.mID = spanishProverb.mID
+where englishProverb.mID = 1;
+
+
+
+
+-- Query with group by
+
+SELECT originalWord 
+FROM substitution
+Where posID = 2
+GROUP BY originalWord;
+
+-- Query with group by having
+
+SELECT COUNT (posID)
+FROM substitution
+GROUP BY originalWord
+HAVING COUNT(*) > 1;
+
+-- Query with union
+
+SELECT subWord
+FROM synonyms
+where synonyms.originalID = 1
+Union
+SELECT  originalWord
+FROM substitution
+where substitution.originalID = 1; 
+
+
+
+-- Query with subquery
+
+select originalWord
+from substitution
+where exists (select subWord
+               from   homonym 
+               where homonym.originalID = substitution.originalID);
+
+
+-- Query with aggregate
+select count (DISTINCT posID)
+from substitution;
+
+
+
+-- Indexes
+
+CREATE INDEX deletion_index
+ON deletion (missingWord, mID);
+
+
+CREATE INDEX spanishProverb_index
+ON spanishPRoverb (mID);
+
+CREATE INDEX engProverb_index
+ON englishProverb (meaningEng);
+
+CREATE INDEX synonym_index
+ON synonyms (subWord, originalID);
+
+CREATE INDEX antonym_index
+ON antonym (subWord, posID);
+
+drop view connection2; 
+
+
+create view connection(Spanish_Meaning, English_Meaning, Word_Substituted, Original_Word)
+AS SELECT meaningSpa, meaningEng, subWord, originalWord
+FROM spanishProverb, englishProverb, antonym, substitution
+Where englishProverb.mID = 1 and spanishProverb.mID = 1 and antonym.mID = 1 and substitution.mID = 1;
+
+create view connection2(syn, original, EngProv)
+AS SELECT subWord, originalWord, meaningEng
+From synonyms, substitution, englishProverb
+Where synonyms.originalID = substitution.originalID and synonyms.mID = englishProverb.mID;
+
+CREATE PROCEDURE doStuff
+AS
+Begin
+INSERT INTO englishProverb (meaningEng, mID) Values ('This is a test', 12);
+End;
+
+CREATE PROCEDURE testStuff
+AS
+BEGIN 
+INSERT INTO spanishProverb (meaningSpa, mID) Values ('Esta es una prueba', 12);
+End; 
+
+Exec testStuff;
+
+EXEC doStuff;
+
+drop procedure doStuff;
+drop procedure testStuff;
+
+
+
+
+
+
+ 
